@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/RoomEnvironment.js';
-import { buildCar, ACCENT } from './car.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { buildCar, useBody, ACCENT } from './car.js';
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const section = document.getElementById('teardown');
@@ -19,9 +20,9 @@ const STAGE_PART = [null, 'shell', 'wheels', 'brakes', 'suspension', 'engine', '
 const SHOTS = [
   [[5.6, 1.75, 5.4], [0, 0.55, 0]],
   [[6.4, 3.6, 6.2], [0, 1.1, 0]],
-  [[3.9, 1.2, 5.2], [1.25, 0.4, 1.3]],
-  [[2.8, 0.85, 4.0], [1.35, 0.38, 1.25]],
-  [[3.3, 2.3, 3.7], [1.2, 0.6, 0.7]],
+  [[3.7, 1.2, 5.1], [1.06, 0.4, 1.25]],
+  [[2.6, 0.85, 3.9], [1.16, 0.38, 1.18]],
+  [[3.1, 2.3, 3.6], [1.0, 0.6, 0.65]],
   [[-4.6, 2.9, 4.0], [-2.1, 1.35, 0]],
   [[-1.3, 2.2, 3.8], [-0.85, 0.95, 0]],
   [[-5.0, 0.9, 3.2], [-2.5, 0.2, 0]],
@@ -118,8 +119,21 @@ function initScene() {
   }
   scene.add(ticks);
 
-  const { root: car, parts } = buildCar();
+  const built = buildCar();
+  const { root: car, parts } = built;
   scene.add(car);
+
+  // Show the car once the generated 911 body has loaded. If it can't load,
+  // fall back to the procedural shell.
+  car.visible = false;
+  const showCar = () => { car.visible = true; };
+  const fallback = setTimeout(showCar, 12000);
+  new GLTFLoader().load(
+    'assets/911.glb',
+    (gltf) => { useBody(built, gltf.scene); clearTimeout(fallback); showCar(); },
+    undefined,
+    () => { clearTimeout(fallback); showCar(); }
+  );
 
   // ---------------------------------------------------------------- sizing
   let width = 0, height = 0, isMobile = false;

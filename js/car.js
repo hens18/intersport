@@ -3,10 +3,11 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/RoundedBoxGeometry.js';
 
-const FRONT_AXLE = 1.35;
-const REAR_AXLE = -1.1;
+// Axles and track match the generated 911 body (assets/911.glb) after scaling.
+const FRONT_AXLE = 1.16;
+const REAR_AXLE = -1.19;
 const WHEEL_R = 0.34;
-const TRACK = 0.8; // half track (wheel centre z)
+const TRACK = 0.74; // half track (wheel centre z)
 
 export const ACCENT = new THREE.Color('#ff5b1f');
 
@@ -192,7 +193,7 @@ function buildShell(M) {
 // ------------------------------------------------------------ chassis + cabin
 function buildChassis(M) {
   const g = new THREE.Group();
-  g.add(rbox(4.25, 0.07, 1.46, 0.03, M.darkMetal, 0, 0.2, 0));
+  g.add(rbox(3.9, 0.07, 1.46, 0.03, M.darkMetal, 0, 0.2, 0));
   g.add(rbox(3.2, 0.12, 0.18, 0.04, M.darkMetal, 0.1, 0.27, 0)); // centre tunnel
   for (const side of [-1, 1]) {
     g.add(rbox(3.0, 0.12, 0.12, 0.04, M.darkMetal, 0.1, 0.27, side * 0.66)); // sills
@@ -358,10 +359,10 @@ function buildExhaust(M) {
     const cat = new THREE.CapsuleGeometry(0.055, 0.14, 6, 20);
     cat.rotateZ(Math.PI / 2);
     g.add(mesh(cat, M.steel, -1.98, 0.27, side * 0.4));
-    g.add(cyl(0.045, 0.045, 0.14, M.titanium, 'x', -2.3, 0.3, side * 0.2, 28));
-    g.add(cyl(0.035, 0.035, 0.145, M.trim, 'x', -2.3, 0.3, side * 0.2, 28));
+    g.add(cyl(0.045, 0.045, 0.14, M.titanium, 'x', -2.19, 0.3, side * 0.2, 28));
+    g.add(cyl(0.035, 0.035, 0.145, M.trim, 'x', -2.19, 0.3, side * 0.2, 28));
   }
-  g.add(rbox(0.2, 0.17, 1.0, 0.07, M.titanium, -2.14, 0.3, 0)); // muffler
+  g.add(rbox(0.2, 0.17, 1.0, 0.07, M.titanium, -2.05, 0.3, 0)); // muffler
   return g;
 }
 
@@ -375,18 +376,18 @@ function buildElectrical(M) {
   for (let i = 0; i < 6; i++) g.add(rbox(0.012, 0.012, 0.02, 0.004, M.wire, 1.43 + i * 0.025, 0.545, -0.2));
   g.add(rbox(0.26, 0.2, 0.9, 0.05, M.darkMetal, 0.95, 0.56, 0)); // HVAC box
   for (const side of [-1, 1]) {
-    const rad = rbox(0.05, 0.28, 0.42, 0.015, M.darkMetal, 2.02, 0.42, side * 0.48);
+    const rad = rbox(0.05, 0.24, 0.4, 0.015, M.darkMetal, 1.86, 0.38, side * 0.46);
     rad.rotation.y = side * -0.35;
     g.add(rad);
     for (let i = 0; i < 7; i++) {
-      const fin = rbox(0.052, 0.012, 0.4, 0.004, M.steel, 2.03, 0.31 + i * 0.037, side * 0.48);
+      const fin = rbox(0.052, 0.012, 0.38, 0.004, M.steel, 1.87, 0.28 + i * 0.032, side * 0.46);
       fin.rotation.y = side * -0.35;
       g.add(fin);
     }
     // Coolant lines back to the engine.
-    g.add(tube([[1.98, 0.36, side * 0.4], [1.4, 0.26, side * 0.5], [0, 0.25, side * 0.55], [-1.2, 0.3, side * 0.25], [-1.45, 0.42, side * 0.2]], 0.014, M.coolant, 80));
+    g.add(tube([[1.84, 0.34, side * 0.38], [1.4, 0.26, side * 0.5], [0, 0.25, side * 0.55], [-1.2, 0.3, side * 0.25], [-1.45, 0.42, side * 0.2]], 0.014, M.coolant, 80));
   }
-  g.add(rbox(0.05, 0.26, 0.5, 0.015, M.darkMetal, 2.1, 0.42, 0)); // A/C condenser
+  g.add(rbox(0.05, 0.22, 0.5, 0.015, M.darkMetal, 1.95, 0.36, 0)); // A/C condenser
   // Wiring harness from the ECU to the engine bay.
   g.add(tube([[1.5, 0.52, -0.28], [1.2, 0.4, -0.5], [0.4, 0.3, -0.6], [-0.9, 0.32, -0.6], [-1.45, 0.62, -0.3], [-1.72, 0.66, -0.1]], 0.012, M.wire, 120));
   g.add(tube([[1.72, 0.5, 0.3], [1.35, 0.42, 0.48], [0.95, 0.5, 0.3]], 0.01, M.wire, 40));
@@ -440,26 +441,76 @@ export function buildCar() {
   add('exhaust', buildExhaust(M), V(-0.45, -0.18, 0));
   add('electrical', buildElectrical(M), V(0.15, 0.75, 0));
 
-  // Give every part its own material instances so it can fade independently.
-  for (const part of Object.values(parts)) {
-    const cache = new Map();
-    part.materials = [];
-    for (const { obj } of part.objects) {
-      obj.traverse((o) => {
-        if (!o.isMesh) return;
-        if (!cache.has(o.material)) {
-          const m = o.material.clone();
-          m.transparent = true;
-          m.userData.baseEmissive = m.emissive ? m.emissive.clone() : null;
-          m.userData.baseEmissiveIntensity = m.emissiveIntensity ?? 0;
-          cache.set(o.material, m);
-          part.materials.push(m);
-        }
-        o.material = cache.get(o.material);
-      });
-    }
-    for (const entry of part.objects) entry.home = entry.obj.position.clone();
-  }
+  for (const part of Object.values(parts)) preparePart(part);
 
   return { root, parts };
+}
+
+// Give every part its own material instances so it can fade independently.
+function preparePart(part) {
+  const cache = new Map();
+  part.materials = [];
+  for (const { obj } of part.objects) {
+    obj.traverse((o) => {
+      if (!o.isMesh) return;
+      if (!cache.has(o.material)) {
+        const m = o.material.clone();
+        m.transparent = true;
+        m.userData.baseEmissive = m.emissive ? m.emissive.clone() : null;
+        m.userData.baseEmissiveIntensity = m.emissiveIntensity ?? 0;
+        cache.set(o.material, m);
+        part.materials.push(m);
+      }
+      o.material = cache.get(o.material);
+    });
+  }
+  for (const entry of part.objects) entry.home = entry.obj.position.clone();
+}
+
+// ------------------------------------------------------- generated 911 body
+// assets/911.glb is an image-to-3D mesh (unit length, nose toward +x). These
+// numbers were measured from it: axle centres, wheel radius and the band of
+// |z| the tyres occupy, all in the mesh's own units.
+const BODY = {
+  scale: [4.5, 4.1, 4.1],   // stretch length slightly to real 911 proportions
+  groundY: 0.1639,          // mesh min y -> ground
+  wheels: [[-0.2645, -0.081], [0.2575, -0.081]],
+  wheelR: 0.087,
+  wheelInnerZ: 0.135,
+};
+
+// Swap the procedural shell for the loaded body. The mesh's baked-in wheels
+// are cut away in the shader so the separate wheel parts show through.
+export function useBody(car, model) {
+  const { root, parts } = car;
+  const holder = new THREE.Group();
+  model.scale.set(...BODY.scale);
+  model.position.y = BODY.groundY * BODY.scale[1];
+  model.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+  holder.add(model);
+
+  const shell = parts.shell;
+  const offset = shell.objects[0].offset;
+  for (const { obj } of shell.objects) root.remove(obj);
+  root.add(holder);
+  shell.objects = [{ obj: holder, offset }];
+  preparePart(shell);
+
+  const [w0, w1] = BODY.wheels;
+  for (const m of shell.materials) {
+    m.side = THREE.DoubleSide;
+    m.onBeforeCompile = (sh) => {
+      sh.vertexShader = sh.vertexShader
+        .replace('#include <common>', '#include <common>\nvarying vec3 vBodyPos;')
+        .replace('#include <begin_vertex>', '#include <begin_vertex>\nvBodyPos = position;');
+      sh.fragmentShader = sh.fragmentShader
+        .replace('#include <common>', '#include <common>\nvarying vec3 vBodyPos;')
+        .replace('#include <clipping_planes_fragment>', `#include <clipping_planes_fragment>
+          vec2 d0 = vBodyPos.xy - vec2(${w0[0]}, ${w0[1]});
+          vec2 d1 = vBodyPos.xy - vec2(${w1[0]}, ${w1[1]});
+          float r2 = ${(BODY.wheelR ** 2).toFixed(6)};
+          if (abs(vBodyPos.z) > ${BODY.wheelInnerZ} && (dot(d0, d0) < r2 || dot(d1, d1) < r2)) discard;`);
+    };
+    m.customProgramCacheKey = () => 'body-no-wheels';
+  }
 }
