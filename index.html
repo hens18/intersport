@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Intersport Performance | European Service &amp; Repair in Ashburn, VA</title>
+  <meta name="description" content="Independent European auto service and repair in Ashburn, VA since 1989. Porsche specialists, plus BMW, Mercedes-Benz, Audi, Ferrari, Aston Martin, Bentley, Land Rover and more." />
+  <meta name="theme-color" content="#0b0c0e" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./vendor/three/three.module.js",
+        "three/addons/": "./vendor/three/addons/"
+      }
+    }
+  </script>
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <header class="nav">
+    <a class="brand" href="#top" aria-label="Intersport Performance home">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-text">Intersport<b>Performance</b></span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#teardown">Inside the car</a>
+      <a href="#services">Services</a>
+      <a href="#brands">Brands</a>
+      <a href="#visit">Visit</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="nav-phone" href="tel:+17035749383">(703) 574-9383</a>
+      <a class="btn btn-sm" href="#book">Book service</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ============ 3D hero + scroll teardown ============ -->
+    <section id="teardown" class="teardown" aria-label="Interactive teardown of a sports car and our services">
+      <div class="stage">
+        <canvas id="scene" aria-hidden="true"></canvas>
+        <div class="scene-fallback" aria-hidden="true"></div>
+        <div class="vignette" aria-hidden="true"></div>
+        <div class="anchor" id="anchor" aria-hidden="true"><i></i><span></span></div>
+
+        <div class="panels">
+          <article class="panel panel-hero is-active" data-stage="0">
+            <p class="eyebrow">European service &amp; repair · Ashburn, VA · Since 1989</p>
+            <h1>Every part.<br /><em>Understood.</em></h1>
+            <p class="lede">Factory-trained technicians for Porsche and every European marque that matters. Dealer-level work at independent-shop rates, from an oil change to a full engine overhaul.</p>
+            <div class="cta-row">
+              <a class="btn" href="#book">Book service</a>
+              <a class="btn btn-ghost" href="#teardown" data-scroll-stage="1">See inside the car <span aria-hidden="true">↓</span></a>
+            </div>
+            <dl class="hero-stats">
+              <div><dt>30+</dt><dd>years with Porsche</dd></div>
+              <div><dt>12</dt><dd>European marques</dd></div>
+              <div><dt>Free</dt><dd>local pick-up &amp; delivery</dd></div>
+            </dl>
+          </article>
+
+          <article class="panel" data-stage="1" data-anchor="shell" data-label="Inspection">
+            <p class="kicker"><span>01</span> Multi-point inspection</p>
+            <h2>We start by looking at everything.</h2>
+            <p>Fluids, leaks, wear, fault codes and service history, all before anyone picks up a wrench. You hear what needs doing now and what can wait, in plain language.</p>
+            <ul class="specs"><li>Multi-point inspection</li><li>Pre-sale inspections &amp; appraisals</li><li>Virginia safety inspection</li></ul>
+          </article>
+
+          <article class="panel" data-stage="2" data-anchor="wheels" data-label="Wheels &amp; tires">
+            <p class="kicker"><span>02</span> Wheels &amp; tires</p>
+            <h2>Where the car meets the road.</h2>
+            <p>New tires matched to your car's spec, plus repairs, rotation, balancing and a precise alignment so the car tracks straight and wears evenly.</p>
+            <ul class="specs"><li>Tire sales &amp; mounting</li><li>Rotation &amp; balancing</li><li>Four-wheel alignment</li></ul>
+          </article>
+
+          <article class="panel" data-stage="3" data-anchor="brakes" data-label="Brakes">
+            <p class="kicker"><span>03</span> Brakes</p>
+            <h2>Stopping power, restored.</h2>
+            <p>Pads, rotors, calipers and fluid, measured against factory tolerances. We cover performance brake setups for spirited road and track driving too.</p>
+            <ul class="specs"><li>Pads &amp; rotors</li><li>Caliper service</li><li>Brake fluid flush</li></ul>
+          </article>
+
+          <article class="panel" data-stage="4" data-anchor="suspension" data-label="Steering &amp; suspension">
+            <p class="kicker"><span>04</span> Steering &amp; suspension</p>
+            <h2>The feel you bought it for.</h2>
+            <p>Worn bushings, tired dampers and loose tie rods slowly dull the precision these cars are known for. We find it and fix it.</p>
+            <ul class="specs"><li>Shocks, struts &amp; springs</li><li>Control arms &amp; bushings</li><li>Steering racks &amp; tie rods</li></ul>
+          </article>
+
+          <article class="panel" data-stage="5" data-anchor="engine" data-label="Engine">
+            <p class="kicker"><span>05</span> Engine</p>
+            <h2>From tune-up to full rebuild.</h2>
+            <p>Our master technicians have spent three decades inside flat-sixes, V8s and V12s. They handle routine tune-ups, complete overhauls and performance tuning.</p>
+            <ul class="specs"><li>Engine repair &amp; overhaul</li><li>Performance tuning</li><li>Oil change service</li></ul>
+          </article>
+
+          <article class="panel" data-stage="6" data-anchor="transmission" data-label="Transmission">
+            <p class="kicker"><span>06</span> Transmission &amp; drivetrain</p>
+            <h2>Every gear, every shift.</h2>
+            <p>Manual gearboxes, PDK and automatic transmissions, clutches, differentials and axles, diagnosed and repaired by people who know European drivetrains.</p>
+            <ul class="specs"><li>Transmission repair</li><li>Clutch replacement</li><li>Differential &amp; CV axles</li></ul>
+          </article>
+
+          <article class="panel" data-stage="7" data-anchor="exhaust" data-label="Exhaust">
+            <p class="kicker"><span>07</span> Exhaust</p>
+            <h2>Breathe right. Sound right.</h2>
+            <p>Mufflers, catalytic converters, headers and complete exhaust systems, repaired to factory spec or upgraded for more performance.</p>
+            <ul class="specs"><li>Mufflers &amp; resonators</li><li>Catalytic converters</li><li>Performance exhaust</li></ul>
+          </article>
+
+          <article class="panel" data-stage="8" data-anchor="electrical" data-label="Diagnostics &amp; climate">
+            <p class="kicker"><span>08</span> Diagnostics, cooling &amp; climate</p>
+            <h2>Check engine light? We'll read it.</h2>
+            <p>Dealer-grade diagnostics trace a fault to its source. We also service cooling systems, heating and A/C, so the car stays comfortable and runs at the right temperature.</p>
+            <ul class="specs"><li>Check-engine diagnostics</li><li>Heating &amp; A/C</li><li>Cooling system service</li></ul>
+          </article>
+
+          <article class="panel panel-final" data-stage="9">
+            <p class="kicker"><span>09</span> Reassembled</p>
+            <h2>Road-tested. Returned. <em>Right.</em></h2>
+            <p>Factory-scheduled maintenance for up to 30% less than the dealer, with no need for an expensive extended warranty.</p>
+            <div class="cta-row">
+              <a class="btn" href="#book">Book service</a>
+              <a class="btn btn-ghost" href="#services">All services</a>
+            </div>
+          </article>
+        </div>
+
+        <ol class="rail" aria-label="Teardown chapters">
+          <li><button data-scroll-stage="0" aria-label="Overview"></button></li>
+          <li><button data-scroll-stage="1" aria-label="Inspection"></button></li>
+          <li><button data-scroll-stage="2" aria-label="Wheels and tires"></button></li>
+          <li><button data-scroll-stage="3" aria-label="Brakes"></button></li>
+          <li><button data-scroll-stage="4" aria-label="Steering and suspension"></button></li>
+          <li><button data-scroll-stage="5" aria-label="Engine"></button></li>
+          <li><button data-scroll-stage="6" aria-label="Transmission"></button></li>
+          <li><button data-scroll-stage="7" aria-label="Exhaust"></button></li>
+          <li><button data-scroll-stage="8" aria-label="Diagnostics and climate"></button></li>
+          <li><button data-scroll-stage="9" aria-label="Reassembled"></button></li>
+        </ol>
+        <div class="scroll-hint" aria-hidden="true"><span>Scroll to take it apart</span><i></i></div>
+      </div>
+    </section>
+
+    <!-- ============ Services ============ -->
+    <section id="services" class="section">
+      <header class="section-head">
+        <p class="eyebrow">Service menu</p>
+        <h2>Everything your car needs, under one roof.</h2>
+        <p>Intersport technicians are chosen for their skill, experience and commitment to getting it right the first time. We work for discerning drivers, racers and motorsport enthusiasts alike.</p>
+      </header>
+      <div class="svc-grid">
+        <div class="svc"><span>01</span><h3>Factory-scheduled maintenance</h3><p>Manufacturer service intervals, done to spec, for up to 30% less than the dealer.</p></div>
+        <div class="svc"><span>02</span><h3>Oil change service</h3><p>The right oil and filter for your engine, with a quick look over the rest of the car.</p></div>
+        <div class="svc"><span>03</span><h3>Check-engine diagnostics</h3><p>Dealer-grade scan tools and experienced technicians to find the real cause.</p></div>
+        <div class="svc"><span>04</span><h3>Engine &amp; transmission repair</h3><p>Everything from a leaking gasket to a complete overhaul.</p></div>
+        <div class="svc"><span>05</span><h3>Brakes</h3><p>Pads, rotors, calipers and fluid for both street and performance setups.</p></div>
+        <div class="svc"><span>06</span><h3>Steering &amp; suspension</h3><p>Shocks, struts, bushings and steering repairs to bring back the car's precision.</p></div>
+        <div class="svc"><span>07</span><h3>Tires &amp; alignment</h3><p>New tires, repairs, rotation and alignment.</p></div>
+        <div class="svc"><span>08</span><h3>Exhaust systems</h3><p>Mufflers, catalytic converters and complete exhaust systems.</p></div>
+        <div class="svc"><span>09</span><h3>Climate control</h3><p>Heating and A/C diagnosis, recharge and repair.</p></div>
+        <div class="svc"><span>10</span><h3>Performance tuning</h3><p>More response and more power, fitted carefully and correctly.</p></div>
+        <div class="svc"><span>11</span><h3>Pre-sale inspections</h3><p>Buying or selling? Get an independent inspection and appraisal from Porsche specialists.</p></div>
+        <div class="svc"><span>12</span><h3>Restoration</h3><p>Careful, correct work to bring a classic back to its best.</p></div>
+      </div>
+    </section>
+
+    <!-- ============ Why ============ -->
+    <section class="section why">
+      <div class="why-grid">
+        <div class="why-item">
+          <h3>Up to 30% less than the dealer</h3>
+          <p>You get factory-scheduled service without dealer pricing or an extended warranty.</p>
+        </div>
+        <div class="why-item">
+          <h3>Free pick-up &amp; delivery</h3>
+          <p>Can't get to us? We'll collect your car and bring it back if you're nearby in Northern Virginia or Maryland.</p>
+        </div>
+        <div class="why-item">
+          <h3>After-hours key drop</h3>
+          <p>Leave your keys in the curbside lockbox from 6 pm to 8 am on weekdays, until 10 am on Saturday, or any time on Sunday.</p>
+        </div>
+        <div class="why-item">
+          <h3>Porsche people, since 1989</h3>
+          <p>We're one of the few shops in the country that can honestly call ourselves Porsche experts.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Brands ============ -->
+    <section id="brands" class="section">
+      <header class="section-head">
+        <p class="eyebrow">Marques we service</p>
+        <h2>British. Italian. German.</h2>
+      </header>
+      <div class="brand-cols">
+        <div><h3>British</h3><ul><li>Aston Martin</li><li>Bentley</li><li>Jaguar</li><li>Land Rover</li></ul></div>
+        <div><h3>Italian</h3><ul><li>Alfa Romeo</li><li>Ferrari</li><li>Lamborghini</li><li>Maserati</li></ul></div>
+        <div><h3>German</h3><ul><li>Audi</li><li>BMW</li><li>Mercedes-Benz</li><li class="hl">Porsche</li></ul></div>
+      </div>
+    </section>
+
+    <!-- ============ Beyond the wrench ============ -->
+    <section class="section beyond">
+      <header class="section-head">
+        <p class="eyebrow">Beyond the wrench</p>
+        <h2>Care for the outside, too.</h2>
+      </header>
+      <ul class="chips">
+        <li>Detailing &amp; paint correction</li>
+        <li>Ceramic coating</li>
+        <li>Paint protection film</li>
+        <li>Paintless dent removal</li>
+        <li>Undercarriage dry-ice cleaning</li>
+        <li>Windshield repair &amp; replacement</li>
+        <li>Vehicle storage</li>
+      </ul>
+      <p class="aside">Shopping for your next car? Every car in our <a href="https://www.intersportperformance.com/inventory/" rel="noopener">pre-owned showroom</a> has been hand-picked and serviced here.</p>
+    </section>
+
+    <!-- ============ Visit + book ============ -->
+    <section id="visit" class="section visit">
+      <div class="visit-info">
+        <p class="eyebrow">Visit the shop</p>
+        <h2>Ashburn, on Route 7.</h2>
+        <address>
+          <a href="https://maps.google.com/?q=19760+Ashburn+Rd,+Ashburn,+VA+20147" rel="noopener">19760 Ashburn Rd<br />Ashburn, VA 20147</a>
+        </address>
+        <dl class="hours">
+          <div><dt>Mon – Fri</dt><dd>8:00 am – 6:00 pm</dd></div>
+          <div><dt>Saturday</dt><dd>10:00 am – 6:00 pm drop-off for Monday appointments</dd></div>
+          <div><dt>Sunday</dt><dd>Closed · lockbox open</dd></div>
+        </dl>
+        <p class="contact-lines">
+          <a href="tel:+17035749383">(703) 574-9383</a><br />
+          <a href="mailto:service@intersportperformance.com">service@intersportperformance.com</a>
+        </p>
+        <p class="areas">We serve drivers across Northern Virginia, Maryland and Greater Washington DC, including Leesburg, Reston, Herndon, Sterling, Chantilly, Fairfax, McLean, Great Falls, Arlington, Alexandria, Bethesda and Potomac.</p>
+      </div>
+
+      <form id="book" class="book" novalidate>
+        <h2>Book a service</h2>
+        <p class="form-note">Tell us about your car, and a service advisor will confirm your appointment.</p>
+        <div class="row">
+          <label>Name<input name="name" autocomplete="name" required /></label>
+          <label>Phone<input name="phone" type="tel" autocomplete="tel" required /></label>
+        </div>
+        <label>Email<input name="email" type="email" autocomplete="email" /></label>
+        <div class="row">
+          <label>Vehicle<input name="vehicle" placeholder="e.g. 2016 Porsche 911 Carrera S" required /></label>
+          <label>Preferred date<input name="date" type="date" /></label>
+        </div>
+        <label>Service
+          <select name="service">
+            <option>Factory-scheduled maintenance</option>
+            <option>Oil change</option>
+            <option>Check-engine light / diagnostics</option>
+            <option>Brakes</option>
+            <option>Tires &amp; alignment</option>
+            <option>Steering &amp; suspension</option>
+            <option>Engine or transmission</option>
+            <option>Exhaust</option>
+            <option>Heating &amp; A/C</option>
+            <option>Performance tuning</option>
+            <option>Pre-sale inspection</option>
+            <option>Detailing / protection</option>
+            <option>Something else</option>
+          </select>
+        </label>
+        <label>What's going on?<textarea name="notes" rows="3" placeholder="Noises, warning lights, or anything else we should know"></textarea></label>
+        <label class="check"><input type="checkbox" name="pickup" /> I'd like free pick-up &amp; delivery</label>
+        <button class="btn btn-block" type="submit">Request appointment</button>
+        <p class="form-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>© Intersport Performance · European auto service &amp; repair · Ashburn, VA</span>
+    <span><a href="tel:+17035749383">(703) 574-9383</a> · <a href="mailto:service@intersportperformance.com">service@intersportperformance.com</a></span>
+  </footer>
+</body>
+</html>
