@@ -190,6 +190,29 @@ em { font-style: normal; color: var(--accent); }
 .scroll-hint.is-hidden { opacity: 0; }
 @keyframes drip { 0% { transform: scaleY(0); } 60% { transform: scaleY(1); opacity: 1; } 100% { opacity: 0; } }
 
+/* Free-look controls on the hero */
+.stage.is-interactive #scene { cursor: grab; touch-action: pan-y; }
+.stage.is-dragging #scene { cursor: grabbing; }
+.view-controls {
+  position: absolute; right: var(--gutter); bottom: 28px;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end;
+  max-width: 360px; transition: opacity 0.4s;
+}
+.stage:not(.is-interactive) .view-controls { opacity: 0; pointer-events: none; }
+.no-webgl .view-controls { display: none; }
+.view-controls button {
+  min-width: 36px; height: 36px; padding: 0 12px;
+  background: rgba(11, 12, 14, 0.7); color: var(--text);
+  border: 1px solid var(--line-2); border-radius: 2px; cursor: pointer;
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+  transition: border-color 0.2s, background 0.2s;
+}
+.view-controls button[data-zoom] { font-size: 18px; padding: 0; }
+.view-controls button:hover { border-color: var(--accent); background: rgba(229, 32, 46, 0.12); }
+.view-tip { flex-basis: 100%; margin: 0; text-align: right; font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.tip-touch { display: none; }
+@media (hover: none) { .tip-desk { display: none; } .tip-touch { display: inline; } }
+
 /* Mobile: car in the top half, copy docked to the bottom. */
 @media (max-width: 760px) {
   .vignette { background: linear-gradient(0deg, rgba(8, 9, 10, 0.96) 0%, rgba(8, 9, 10, 0.75) 44%, transparent 64%); }
@@ -214,6 +237,8 @@ em { font-style: normal; color: var(--accent); }
   .rail button::after { width: 10px; }
   .rail button.is-active::after { width: 20px; }
   .scroll-hint { display: none; }
+  .view-controls { top: calc(var(--nav-h) + 12px); bottom: auto; right: 44px; left: 16px; justify-content: flex-start; }
+  .view-tip { text-align: left; }
 }
 @media (max-width: 760px) and (max-height: 700px) {
   .panel .specs, .hero-stats { display: none; }

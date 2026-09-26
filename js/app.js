@@ -160,6 +160,83 @@ function initScene() {
     pointer.set((e.clientX / innerWidth) * 2 - 1, (e.clientY / innerHeight) * 2 - 1);
   }, { passive: true });
 
+  // Free look on the hero: drag spins the car, shift/right-drag or two
+  // fingers pan, pinch / ctrl+wheel / buttons zoom. It fades into the
+  // scripted camera as soon as the teardown starts.
+  const look = {
+    yaw: 0, pitch: 0, zoom: 1, pan: new THREE.Vector3(),
+    to: { yaw: 0, pitch: 0, zoom: 1, pan: new THREE.Vector3() },
+    touched: false, active: false,
+  };
+  const stageEl = canvas.parentElement;
+  const pointers = new Map();
+  let pinch = null;
+  const camRight = new THREE.Vector3();
+  const camUp = new THREE.Vector3();
+  const setZoom = (z) => { look.to.zoom = THREE.MathUtils.clamp(z, 0.45, 1.8); look.touched = true; };
+  const panBy = (dx, dy) => {
+    const k = 0.0032 * look.zoom * (isMobile ? 1.6 : 1);
+    camRight.setFromMatrixColumn(camera.matrixWorld, 0);
+    camUp.setFromMatrixColumn(camera.matrixWorld, 1);
+    look.to.pan.addScaledVector(camRight, -dx * k).addScaledVector(camUp, dy * k);
+    look.to.pan.clampLength(0, 2.5);
+  };
+
+  canvas.addEventListener('pointerdown', (e) => {
+    if (!look.active) return;
+    pointers.set(e.pointerId, { x: e.clientX, y: e.clientY, pan: e.shiftKey || e.button === 2 });
+    canvas.setPointerCapture(e.pointerId);
+    stageEl.classList.add('is-dragging');
+    look.touched = true;
+    if (pointers.size === 2) {
+      const [p1, p2] = [...pointers.values()];
+      pinch = { d: Math.hypot(p1.x - p2.x, p1.y - p2.y), zoom: look.to.zoom, mx: (p1.x + p2.x) / 2, my: (p1.y + p2.y) / 2 };
+    }
+  });
+  canvas.addEventListener('pointermove', (e) => {
+    const prev = pointers.get(e.pointerId);
+    if (!prev || !look.active) return;
+    const dx = e.clientX - prev.x, dy = e.clientY - prev.y;
+    prev.x = e.clientX; prev.y = e.clientY;
+    if (pointers.size >= 2 && pinch) {
+      const [p1, p2] = [...pointers.values()];
+      const d = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+      setZoom(pinch.zoom * (pinch.d / Math.max(d, 1)));
+      const mx = (p1.x + p2.x) / 2, my = (p1.y + p2.y) / 2;
+      panBy(mx - pinch.mx, my - pinch.my);
+      pinch.mx = mx; pinch.my = my;
+    } else if (prev.pan) {
+      panBy(dx, dy);
+    } else {
+      look.to.yaw += dx * 0.008;
+      look.to.pitch = THREE.MathUtils.clamp(look.to.pitch - dy * 0.005, -0.75, 0.6);
+    }
+  });
+  const release = (e) => {
+    pointers.delete(e.pointerId);
+    if (pointers.size < 2) pinch = null;
+    if (!pointers.size) stageEl.classList.remove('is-dragging');
+  };
+  canvas.addEventListener('pointerup', release);
+  canvas.addEventListener('pointercancel', release);
+  canvas.addEventListener('contextmenu', (e) => { if (look.active) e.preventDefault(); });
+  // Plain wheel keeps scrolling the page; trackpad pinch and ctrl/cmd+wheel zoom.
+  stageEl.addEventListener('wheel', (e) => {
+    if (!look.active || !(e.ctrlKey || e.metaKey)) return;
+    e.preventDefault();
+    // Mouse notches (~100px) and trackpad pinches (a few px) both feel right.
+    setZoom(look.to.zoom * Math.exp(THREE.MathUtils.clamp(e.deltaY, -40, 40) * 0.006));
+  }, { passive: false });
+  document.querySelectorAll('[data-zoom]').forEach((btn) => btn.addEventListener('click', () =>
+    setZoom(look.to.zoom * (btn.dataset.zoom === 'in' ? 0.8 : 1.25))));
+  document.querySelector('[data-reset-view]')?.addEventListener('click', () => {
+    look.to.yaw = Math.round(look.yaw / (Math.PI * 2)) * Math.PI * 2;
+    look.to.pitch = 0; look.to.zoom = 1; look.to.pan.set(0, 0, 0);
+  });
+  const heroPos = new THREE.Vector3();
+  const heroTarget = new THREE.Vector3();
+  const sph = new THREE.Spherical();
+
   function scrollProgress() {
     const max = section.offsetHeight - innerHeight;
     return clamp01((scrollY - section.offsetTop) / max);
@@ -192,6 +269,15 @@ function initScene() {
     const stageIdx = Math.round(p);
     setActiveStage(stageIdx);
     hint.classList.toggle('is-hidden', p > 0.15);
+    look.active = p < 0.35;
+    stageEl.classList.toggle('is-interactive', look.active);
+
+    // Ease the free-look values toward where the viewer dragged them.
+    const ease = reduceMotion ? 1 : 1 - Math.exp(-dt * 8);
+    look.yaw += (look.to.yaw - look.yaw) * ease;
+    look.pitch += (look.to.pitch - look.pitch) * ease;
+    look.zoom += (look.to.zoom - look.zoom) * ease;
+    look.pan.lerp(look.to.pan, ease);
 
     // Explosion: each part comes out on its chapter and stays out until reassembly.
     const reassemble = smoothstep(8.05, 8.95, s);
@@ -217,20 +303,33 @@ function initScene() {
       }
     }
 
-    // Gentle turntable sway on the hero, fading out as the teardown begins.
+    // Hero: gentle turntable sway until the viewer takes over, plus their
+    // spin. Both unwind as the teardown begins.
     const heroW = 1 - smoothstep(0, 0.9, s);
-    car.rotation.y = reduceMotion ? 0 : Math.sin(time * 0.3) * 0.5 * heroW;
+    if (heroW > 0.999 && Math.abs(look.yaw - look.to.yaw) < 1e-3) {
+      // Keep the spin within one turn so scrolling never unwinds several.
+      const wrapped = THREE.MathUtils.euclideanModulo(look.yaw + Math.PI, Math.PI * 2) - Math.PI;
+      look.to.yaw += wrapped - look.yaw; look.yaw = wrapped;
+    }
+    const sway = reduceMotion || look.touched ? 0 : Math.sin(time * 0.3) * 0.5;
+    car.rotation.y = (sway + look.yaw) * heroW;
     ticks.rotation.y = car.rotation.y;
 
     // Camera: blend between chapter shots.
-    const a = SHOTS[i0], b = SHOTS[i0 + 1];
+    // The hero shot carries the viewer's tilt, zoom and pan.
+    heroTarget.copy(SHOTS[0][1]).add(look.pan);
+    sph.setFromVector3(tmpA.subVectors(SHOTS[0][0], SHOTS[0][1]));
+    sph.radius *= look.zoom;
+    sph.phi = THREE.MathUtils.clamp(sph.phi - look.pitch, 0.2, 1.52);
+    heroPos.setFromSpherical(sph).add(heroTarget);
+    const a = i0 === 0 ? [heroPos, heroTarget] : SHOTS[i0], b = SHOTS[i0 + 1];
     const f = s - i0;
     camPos.lerpVectors(a[0], b[0], f);
     camTarget.lerpVectors(a[1], b[1], f);
     // Arc outward mid-transition so the camera doesn't clip through parts.
     camPos.sub(camTarget).multiplyScalar(1 + Math.sin(f * Math.PI) * 0.18).add(camTarget);
     if (isMobile) camPos.sub(camTarget).multiplyScalar(1.28).add(camTarget);
-    pointerSmooth.lerp(pointer, 1 - Math.exp(-dt * 3));
+    pointerSmooth.lerp(pointers.size ? pointerSmooth : pointer, 1 - Math.exp(-dt * 3));
     camPos.x += pointerSmooth.x * 0.25;
     camPos.y -= pointerSmooth.y * 0.15;
     camera.position.copy(camPos);
