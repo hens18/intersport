@@ -470,7 +470,8 @@ function preparePart(part) {
 // ------------------------------------------------------- generated 911 body
 // assets/911.glb is an image-to-3D mesh (unit length, nose toward +x). These
 // numbers were measured from it: axle centres, wheel radius and the band of
-// |z| the tyres occupy, all in the mesh's own units.
+// |z| the tyres occupy, all in the mesh's own units (before any compression
+// transform the file may carry).
 const BODY = {
   scale: [4.5, 4.1, 4.1],   // stretch length slightly to real 911 proportions
   groundY: 0.1639,          // mesh min y -> ground
@@ -486,8 +487,19 @@ export function useBody(car, model) {
   const holder = new THREE.Group();
   model.scale.set(...BODY.scale);
   model.position.y = BODY.groundY * BODY.scale[1];
-  model.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+  let bodyMesh = null;
+  model.traverse((o) => {
+    if (!o.isMesh) return;
+    o.castShadow = true; o.receiveShadow = true;
+    bodyMesh ||= o;
+  });
   holder.add(model);
+
+  // Compressed (quantized) files store positions in a packed range and undo
+  // it with a node transform. Map raw positions back to the mesh's original
+  // units so the measured wheel positions above still apply.
+  model.updateMatrixWorld(true);
+  const toBody = new THREE.Matrix4().copy(model.matrixWorld).invert().multiply(bodyMesh.matrixWorld);
 
   const shell = parts.shell;
   const offset = shell.objects[0].offset;
@@ -500,9 +512,10 @@ export function useBody(car, model) {
   for (const m of shell.materials) {
     m.side = THREE.DoubleSide;
     m.onBeforeCompile = (sh) => {
+      sh.uniforms.uToBody = { value: toBody };
       sh.vertexShader = sh.vertexShader
-        .replace('#include <common>', '#include <common>\nvarying vec3 vBodyPos;')
-        .replace('#include <begin_vertex>', '#include <begin_vertex>\nvBodyPos = position;');
+        .replace('#include <common>', '#include <common>\nuniform mat4 uToBody;\nvarying vec3 vBodyPos;')
+        .replace('#include <begin_vertex>', '#include <begin_vertex>\nvBodyPos = (uToBody * vec4(position, 1.0)).xyz;');
       sh.fragmentShader = sh.fragmentShader
         .replace('#include <common>', '#include <common>\nvarying vec3 vBodyPos;')
         .replace('#include <clipping_planes_fragment>', `#include <clipping_planes_fragment>

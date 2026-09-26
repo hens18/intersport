@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/RoomEnvironment.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { buildCar, useBody, ACCENT } from './car.js';
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -10,7 +11,6 @@ const panels = [...document.querySelectorAll('.panel')];
 const railButtons = [...document.querySelectorAll('.rail button')];
 const anchorEl = document.getElementById('anchor');
 const hint = document.querySelector('.scroll-hint');
-const nav = document.querySelector('.nav');
 const STAGES = panels.length; // 0 = hero … 9 = reassembled
 
 // Which part each chapter pulls out. Stage 1 (inspection) lifts the body.
@@ -33,14 +33,8 @@ const SHOTS = [
 const clamp01 = (v) => Math.min(1, Math.max(0, v));
 const smoothstep = (a, b, v) => { const t = clamp01((v - a) / (b - a)); return t * t * (3 - 2 * t); };
 
-// ------------------------------------------------------------------ UI that works without WebGL
-function scrollToStage(i) {
-  const max = section.offsetHeight - innerHeight;
-  const y = section.offsetTop + (i / (STAGES - 1)) * max;
-  window.scrollTo({ top: y, behavior: reduceMotion ? 'auto' : 'smooth' });
-}
-document.querySelectorAll('[data-scroll-stage]').forEach((el) =>
-  el.addEventListener('click', (e) => { e.preventDefault(); scrollToStage(+el.dataset.scrollStage); }));
+// Page UI (menu, form, reviews, chapter buttons) lives in site.js so it works
+// even when this module or WebGL can't run.
 
 let activeStage = -1;
 function setActiveStage(i) {
@@ -49,9 +43,6 @@ function setActiveStage(i) {
   panels.forEach((p, k) => p.classList.toggle('is-active', k === i));
   railButtons.forEach((b, k) => b.classList.toggle('is-active', k === i));
 }
-
-setupBookingForm();
-setupReviewMarquee();
 
 // ------------------------------------------------------------------ scene
 let renderer;
@@ -65,6 +56,7 @@ try {
 if (renderer) initScene();
 
 function initScene() {
+  document.documentElement.classList.add('has-scene');
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
@@ -129,7 +121,7 @@ function initScene() {
   car.visible = false;
   const showCar = () => { car.visible = true; };
   const fallback = setTimeout(showCar, 12000);
-  new GLTFLoader().load(
+  new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).load(
     'assets/911.glb',
     (gltf) => { useBody(built, gltf.scene); clearTimeout(fallback); showCar(); },
     undefined,
@@ -255,8 +247,7 @@ function initScene() {
 
   function frame() {
     requestAnimationFrame(frame);
-    nav.classList.toggle('is-solid', scrollY > section.offsetTop + section.offsetHeight - innerHeight - 10);
-    if (!visible) return;
+    if (!visible) { stageEl.classList.remove('is-interactive'); look.active = false; return; }
 
     const dt = Math.min(0.1, clock.getDelta());
     const time = clock.elapsedTime;
@@ -358,53 +349,4 @@ function initScene() {
     renderer.render(scene, camera);
   }
   frame();
-}
-
-// ------------------------------------------------------------------ booking form
-// No backend yet: builds a pre-filled email to the service desk.
-function setupBookingForm() {
-  const form = document.getElementById('book');
-  const status = form.querySelector('.form-status');
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    let ok = true;
-    for (const el of form.querySelectorAll('[required]')) {
-      const bad = !el.value.trim();
-      el.setAttribute('aria-invalid', bad);
-      if (bad && ok) { el.focus(); ok = false; }
-    }
-    if (!ok) { status.textContent = 'Please fill in your name, phone and vehicle.'; return; }
-    const d = Object.fromEntries(new FormData(form));
-    const body = [
-      `Name: ${d.name}`, `Phone: ${d.phone}`, `Email: ${d.email || '-'}`,
-      `Vehicle: ${d.vehicle}`, `Service: ${d.service}`, `Preferred date: ${d.date || 'Flexible'}`,
-      `Pick-up & delivery: ${d.pickup ? 'Yes' : 'No'}`, '', d.notes || '',
-    ].join('\n');
-    location.href = `mailto:service@intersportperformance.com?subject=${encodeURIComponent(`Service request: ${d.vehicle}`)}&body=${encodeURIComponent(body)}`;
-    status.textContent = 'Opening your email app. If nothing happens, call (703) 574-9383.';
-  });
-}
-
-// ------------------------------------------------------------------ reviews marquee
-// Repeat the cards until one half of the track is wider than the screen, then
-// duplicate that half so the CSS -50% loop is seamless. Copies are hidden from
-// assistive tech so each review is read once.
-function setupReviewMarquee() {
-  const track = document.querySelector('[data-marquee] .marquee-track');
-  if (!track || reduceMotion) return;
-  const originals = [...track.children];
-  const cloneSet = () => originals.forEach((el) => {
-    const c = el.cloneNode(true);
-    c.setAttribute('aria-hidden', 'true');
-    track.appendChild(c);
-  });
-  while (track.scrollWidth < innerWidth * 1.2) cloneSet();
-  const half = [...track.children];
-  half.forEach((el) => {
-    const c = el.cloneNode(true);
-    c.setAttribute('aria-hidden', 'true');
-    track.appendChild(c);
-  });
-  // Constant speed (~45px/s) whatever the number of cards.
-  track.style.setProperty('--marquee-duration', `${track.scrollWidth / 2 / 45}s`);
 }

@@ -3,9 +3,49 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Intersport Performance | European Service &amp; Repair in Ashburn, VA</title>
-  <meta name="description" content="Independent European auto service and repair in Ashburn, VA since 1989. Porsche specialists, plus BMW, Mercedes-Benz, Audi, Ferrari, Aston Martin, Bentley, Land Rover and more." />
+  <title>Porsche &amp; European Auto Repair in Ashburn, VA | Intersport</title>
+  <meta name="description" content="Porsche specialists since 1989. Factory-scheduled maintenance, diagnostics, brakes, engine and transmission repair for European cars in Ashburn, VA." />
+  <link rel="canonical" href="https://www.intersportperformance.com/" />
   <meta name="theme-color" content="#0b0c0e" />
+  <link rel="icon" href="favicon.ico" sizes="32x32" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="manifest" href="site.webmanifest" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Intersport Performance" />
+  <meta property="og:title" content="Every part. Understood. | Intersport Performance" />
+  <meta property="og:description" content="Porsche specialists since 1989. Factory-scheduled maintenance, diagnostics, brakes, engine and transmission repair for European cars in Ashburn, VA." />
+  <meta property="og:url" content="https://www.intersportperformance.com/" />
+  <meta property="og:image" content="https://www.intersportperformance.com/assets/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="A silver Porsche 911 on a turntable beside the headline Every part. Understood." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "AutoRepair",
+      "name": "Intersport Performance",
+      "description": "Independent Porsche and European auto service and repair.",
+      "url": "https://www.intersportperformance.com/",
+      "image": "https://www.intersportperformance.com/assets/og-image.jpg",
+      "telephone": "+1-703-574-9383",
+      "email": "service@intersportperformance.com",
+      "foundingDate": "1989",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "19760 Ashburn Rd",
+        "addressLocality": "Ashburn",
+        "addressRegion": "VA",
+        "postalCode": "20147",
+        "addressCountry": "US"
+      },
+      "openingHoursSpecification": [
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "08:00", "closes": "18:00" },
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "10:00", "closes": "18:00" }
+      ]
+    }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -18,11 +58,12 @@
       }
     }
   </script>
+  <script src="js/site.js" defer></script>
   <script type="module" src="js/app.js"></script>
 </head>
 <body>
   <header class="nav">
-    <a class="brand" href="#top" aria-label="Intersport Performance home">
+    <a class="brand" href="./" data-home aria-label="Intersport Performance, home">
       <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
         <circle cx="16" cy="16" r="13" class="tread" />
         <circle cx="16" cy="16" r="10.2" class="sidewall" />
@@ -35,7 +76,6 @@
       <span class="brand-text"><b>Intersport</b></span>
     </a>
     <nav class="nav-links" aria-label="Primary">
-      <a href="#teardown">Inside the car</a>
       <a href="#services">Services</a>
       <a href="#reviews">Reviews</a>
       <a href="#brands">Brands</a>
@@ -43,16 +83,32 @@
     </nav>
     <div class="nav-cta">
       <a class="nav-phone" href="tel:+17035749383">(703) 574-9383</a>
-      <a class="btn btn-sm" href="#book">Book service</a>
+      <a class="btn btn-sm" href="#book">Book<span class="nav-btn-extra"> service</span></a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu"><span></span><span></span></button>
     </div>
   </header>
+
+  <div id="mobile-menu" class="mobile-menu">
+    <nav class="mobile-menu-links" aria-label="Mobile">
+      <a href="#services">Services</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#brands">Brands</a>
+      <a href="#visit">Hours &amp; location</a>
+      <a href="#book">Book service</a>
+    </nav>
+    <div class="mobile-menu-contact">
+      <a class="btn btn-block" href="tel:+17035749383">Call (703) 574-9383</a>
+      <a href="mailto:service@intersportperformance.com">service@intersportperformance.com</a>
+      <a href="https://maps.google.com/?q=19760+Ashburn+Rd,+Ashburn,+VA+20147" rel="noopener">19760 Ashburn Rd, Ashburn, VA 20147</a>
+      <p>Mon–Fri 8 am – 6 pm · Sat 10 am – 6 pm · Sun closed</p>
+    </div>
+  </div>
 
   <main id="top">
     <!-- ============ 3D hero + scroll teardown ============ -->
     <section id="teardown" class="teardown" aria-label="Interactive teardown of a sports car and our services">
       <div class="stage">
         <canvas id="scene" aria-hidden="true"></canvas>
-        <div class="scene-fallback" aria-hidden="true"></div>
         <div class="vignette" aria-hidden="true"></div>
         <div class="anchor" id="anchor" aria-hidden="true"><i></i><span></span></div>
 
@@ -72,56 +128,56 @@
             </dl>
           </article>
 
-          <article class="panel" data-stage="1" data-anchor="shell" data-label="Inspection">
+          <article class="panel" data-stage="1" data-label="Inspection">
             <p class="kicker"><span>01</span> Multi-point inspection</p>
             <h2>We start by looking at everything.</h2>
             <p>Fluids, leaks, wear, fault codes and service history, all before anyone picks up a wrench. You hear what needs doing now and what can wait, in plain language.</p>
             <ul class="specs"><li>Multi-point inspection</li><li>Pre-sale inspections &amp; appraisals</li><li>Virginia safety inspection</li></ul>
           </article>
 
-          <article class="panel" data-stage="2" data-anchor="wheels" data-label="Wheels &amp; tires">
+          <article class="panel" data-stage="2" data-label="Wheels &amp; tires">
             <p class="kicker"><span>02</span> Wheels &amp; tires</p>
             <h2>Where the car meets the road.</h2>
             <p>New tires matched to your car's spec, plus repairs, rotation, balancing and a precise alignment so the car tracks straight and wears evenly.</p>
             <ul class="specs"><li>Tire sales &amp; mounting</li><li>Rotation &amp; balancing</li><li>Four-wheel alignment</li></ul>
           </article>
 
-          <article class="panel" data-stage="3" data-anchor="brakes" data-label="Brakes">
+          <article class="panel" data-stage="3" data-label="Brakes">
             <p class="kicker"><span>03</span> Brakes</p>
             <h2>Stopping power, restored.</h2>
             <p>Pads, rotors, calipers and fluid, measured against factory tolerances. We cover performance brake setups for spirited road and track driving too.</p>
             <ul class="specs"><li>Pads &amp; rotors</li><li>Caliper service</li><li>Brake fluid flush</li></ul>
           </article>
 
-          <article class="panel" data-stage="4" data-anchor="suspension" data-label="Steering &amp; suspension">
+          <article class="panel" data-stage="4" data-label="Steering &amp; suspension">
             <p class="kicker"><span>04</span> Steering &amp; suspension</p>
             <h2>The feel you bought it for.</h2>
             <p>Worn bushings, tired dampers and loose tie rods slowly dull the precision these cars are known for. We find it and fix it.</p>
             <ul class="specs"><li>Shocks, struts &amp; springs</li><li>Control arms &amp; bushings</li><li>Steering racks &amp; tie rods</li></ul>
           </article>
 
-          <article class="panel" data-stage="5" data-anchor="engine" data-label="Engine">
+          <article class="panel" data-stage="5" data-label="Engine">
             <p class="kicker"><span>05</span> Engine</p>
             <h2>From tune-up to full rebuild.</h2>
             <p>Our master technicians have spent three decades inside flat-sixes, V8s and V12s. They handle routine tune-ups, complete overhauls and performance tuning.</p>
             <ul class="specs"><li>Engine repair &amp; overhaul</li><li>Performance tuning</li><li>Oil change service</li></ul>
           </article>
 
-          <article class="panel" data-stage="6" data-anchor="transmission" data-label="Transmission">
+          <article class="panel" data-stage="6" data-label="Transmission">
             <p class="kicker"><span>06</span> Transmission &amp; drivetrain</p>
             <h2>Every gear, every shift.</h2>
             <p>Manual gearboxes, PDK and automatic transmissions, clutches, differentials and axles, diagnosed and repaired by people who know European drivetrains.</p>
             <ul class="specs"><li>Transmission repair</li><li>Clutch replacement</li><li>Differential &amp; CV axles</li></ul>
           </article>
 
-          <article class="panel" data-stage="7" data-anchor="exhaust" data-label="Exhaust">
+          <article class="panel" data-stage="7" data-label="Exhaust">
             <p class="kicker"><span>07</span> Exhaust</p>
             <h2>Breathe right. Sound right.</h2>
             <p>Mufflers, catalytic converters, headers and complete exhaust systems, repaired to factory spec or upgraded for more performance.</p>
             <ul class="specs"><li>Mufflers &amp; resonators</li><li>Catalytic converters</li><li>Performance exhaust</li></ul>
           </article>
 
-          <article class="panel" data-stage="8" data-anchor="electrical" data-label="Diagnostics &amp; climate">
+          <article class="panel" data-stage="8" data-label="Diagnostics &amp; climate">
             <p class="kicker"><span>08</span> Diagnostics, cooling &amp; climate</p>
             <h2>Check engine light? We'll read it.</h2>
             <p>Dealer-grade diagnostics trace a fault to its source. We also service cooling systems, heating and A/C, so the car stays comfortable and runs at the right temperature.</p>
@@ -275,8 +331,8 @@
         </address>
         <dl class="hours">
           <div><dt>Mon – Fri</dt><dd>8:00 am – 6:00 pm</dd></div>
-          <div><dt>Saturday</dt><dd>10:00 am – 6:00 pm drop-off for Monday appointments</dd></div>
-          <div><dt>Sunday</dt><dd>Closed · lockbox open</dd></div>
+          <div><dt>Saturday</dt><dd>10:00 am – 6:00 pm</dd></div>
+          <div><dt>Sunday</dt><dd>Closed · after-hours key drop open</dd></div>
         </dl>
         <p class="contact-lines">
           <a href="tel:+17035749383">(703) 574-9383</a><br />
@@ -285,20 +341,47 @@
         <p class="areas">We serve drivers across Northern Virginia, Maryland and Greater Washington DC, including Leesburg, Reston, Herndon, Sterling, Chantilly, Fairfax, McLean, Great Falls, Arlington, Alexandria, Bethesda and Potomac.</p>
       </div>
 
-      <form id="book" class="book" novalidate>
-        <h2>Book a service</h2>
-        <p class="form-note">Tell us about your car, and a service advisor will confirm your appointment.</p>
-        <div class="row">
-          <label>Name<input name="name" autocomplete="name" required /></label>
-          <label>Phone<input name="phone" type="tel" autocomplete="tel" required /></label>
-        </div>
-        <label>Email<input name="email" type="email" autocomplete="email" /></label>
-        <div class="row">
-          <label>Vehicle<input name="vehicle" placeholder="e.g. 2016 Porsche 911 Carrera S" required /></label>
-          <label>Preferred date<input name="date" type="date" /></label>
-        </div>
-        <label>Service
-          <select name="service">
+      <form id="book" class="book" novalidate data-endpoint="" aria-labelledby="book-title">
+        <h2 id="book-title">Book a service</h2>
+        <p class="form-note">Tell us about your car and a service advisor will contact you to confirm a time. Fields marked <span aria-hidden="true">*</span><span class="sr-only">with an asterisk</span> are required.</p>
+        <div class="form-alert" role="alert" hidden></div>
+        <div class="form-fields">
+          <div class="row">
+            <div class="field">
+              <label for="f-name">Name <span aria-hidden="true">*</span></label>
+              <input id="f-name" name="name" autocomplete="name" required aria-describedby="err-name" />
+              <p class="field-error" id="err-name" hidden></p>
+            </div>
+            <div class="field">
+              <label for="f-phone">Phone <span aria-hidden="true">*</span></label>
+              <input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required aria-describedby="err-phone" />
+              <p class="field-error" id="err-phone" hidden></p>
+            </div>
+          </div>
+          <div class="field">
+            <label for="f-email">Email</label>
+            <input id="f-email" name="email" type="email" autocomplete="email" aria-describedby="hint-email err-email" />
+            <p class="hint" id="hint-email">Optional.</p>
+            <p class="field-error" id="err-email" hidden></p>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="f-vehicle">Vehicle <span aria-hidden="true">*</span></label>
+              <input id="f-vehicle" name="vehicle" required aria-describedby="hint-vehicle err-vehicle" />
+              <p class="hint" id="hint-vehicle">Year, make and model.</p>
+              <p class="field-error" id="err-vehicle" hidden></p>
+            </div>
+            <div class="field">
+              <label for="f-date">Preferred date</label>
+              <input id="f-date" name="date" type="date" aria-describedby="hint-date err-date" />
+              <p class="hint" id="hint-date">Monday to Saturday. Leave blank if you’re flexible.</p>
+              <p class="field-error" id="err-date" hidden></p>
+            </div>
+          </div>
+          <div class="field">
+            <label for="f-service">Service</label>
+            <select id="f-service" name="service">
+            <option>Not sure yet: please diagnose it</option>
             <option>Factory-scheduled maintenance</option>
             <option>Oil change</option>
             <option>Check-engine light / diagnostics</option>
@@ -313,18 +396,76 @@
             <option>Detailing / protection</option>
             <option>Something else</option>
           </select>
-        </label>
-        <label>What's going on?<textarea name="notes" rows="3" placeholder="Noises, warning lights, or anything else we should know"></textarea></label>
-        <label class="check"><input type="checkbox" name="pickup" /> I'd like free pick-up &amp; delivery</label>
-        <button class="btn btn-block" type="submit">Request appointment</button>
-        <p class="form-status" role="status" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="f-notes">What’s going on?</label>
+            <textarea id="f-notes" name="notes" rows="3" aria-describedby="hint-notes"></textarea>
+            <p class="hint" id="hint-notes">Noises, warning lights, recent work: anything that helps us prepare.</p>
+          </div>
+          <label class="check" for="f-pickup"><input id="f-pickup" type="checkbox" name="pickup" value="yes" /> I’d like free pick-up &amp; delivery</label>
+          <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <button class="btn btn-block" type="submit">Request appointment</button>
+          <p class="form-fine">We only use your details to arrange your service. Read our <a href="https://www.intersportperformance.com/privacy-policy/" rel="noopener">privacy policy</a>.</p>
+        </div>
+        <div class="form-success" role="status" tabindex="-1" hidden>
+          <svg class="form-success-icon" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22" /><path d="M14 24.5l6.5 6.5L34 17.5" /></svg>
+          <h3 class="form-success-title"></h3>
+          <p class="form-success-body"></p>
+          <button type="button" class="btn btn-ghost" data-book-again>Book another service</button>
+        </div>
       </form>
     </section>
   </main>
 
   <footer class="footer">
-    <span>© Intersport Performance · European auto service &amp; repair · Ashburn, VA</span>
-    <span><a href="tel:+17035749383">(703) 574-9383</a> · <a href="mailto:service@intersportperformance.com">service@intersportperformance.com</a></span>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="./" data-home aria-label="Intersport Performance, home">
+          <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <circle cx="16" cy="16" r="13" class="tread" />
+        <circle cx="16" cy="16" r="10.2" class="sidewall" />
+        <g class="rim">
+          <circle cx="16" cy="16" r="7" />
+          <path d="M16 14V9M17.9 15.4L22.7 13.8M17.2 17.6L20.1 21.7M14.8 17.6L11.9 21.7M14.1 15.4L9.3 13.8" />
+        </g>
+        <circle cx="16" cy="16" r="1.9" class="hub" />
+      </svg>
+          <span class="brand-text"><b>Intersport</b></span>
+        </a>
+        <p>Independent Porsche and European service and repair in Ashburn, Virginia, since 1989.</p>
+      </div>
+      <nav class="footer-col" aria-label="Footer">
+        <h2>Explore</h2>
+        <ul>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#reviews">Reviews</a></li>
+          <li><a href="#brands">Brands we service</a></li>
+          <li><a href="#visit">Hours &amp; location</a></li>
+          <li><a href="#book">Book service</a></li>
+          <li><a href="https://www.intersportperformance.com/inventory/" rel="noopener">Pre-owned inventory</a></li>
+        </ul>
+      </nav>
+      <div class="footer-col">
+        <h2>Contact</h2>
+        <ul>
+          <li><a href="tel:+17035749383">(703) 574-9383</a></li>
+          <li><a href="mailto:service@intersportperformance.com">service@intersportperformance.com</a></li>
+          <li><a href="https://maps.google.com/?q=19760+Ashburn+Rd,+Ashburn,+VA+20147" rel="noopener">19760 Ashburn Rd<br />Ashburn, VA 20147</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h2>Hours</h2>
+        <ul>
+          <li>Mon–Fri · 8 am – 6 pm</li>
+          <li>Saturday · 10 am – 6 pm</li>
+          <li>Sunday · Closed</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© <span data-year>2026</span> Intersport Performance. All rights reserved.</p>
+      <p><a href="https://www.intersportperformance.com/privacy-policy/" rel="noopener">Privacy policy</a> · <a href="#top">Back to top</a></p>
+    </div>
   </footer>
 </body>
 </html>
