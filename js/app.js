@@ -51,6 +51,7 @@ function setActiveStage(i) {
 }
 
 setupBookingForm();
+setupReviewMarquee();
 
 // ------------------------------------------------------------------ scene
 let renderer;
@@ -382,4 +383,28 @@ function setupBookingForm() {
     location.href = `mailto:service@intersportperformance.com?subject=${encodeURIComponent(`Service request: ${d.vehicle}`)}&body=${encodeURIComponent(body)}`;
     status.textContent = 'Opening your email app. If nothing happens, call (703) 574-9383.';
   });
+}
+
+// ------------------------------------------------------------------ reviews marquee
+// Repeat the cards until one half of the track is wider than the screen, then
+// duplicate that half so the CSS -50% loop is seamless. Copies are hidden from
+// assistive tech so each review is read once.
+function setupReviewMarquee() {
+  const track = document.querySelector('[data-marquee] .marquee-track');
+  if (!track || reduceMotion) return;
+  const originals = [...track.children];
+  const cloneSet = () => originals.forEach((el) => {
+    const c = el.cloneNode(true);
+    c.setAttribute('aria-hidden', 'true');
+    track.appendChild(c);
+  });
+  while (track.scrollWidth < innerWidth * 1.2) cloneSet();
+  const half = [...track.children];
+  half.forEach((el) => {
+    const c = el.cloneNode(true);
+    c.setAttribute('aria-hidden', 'true');
+    track.appendChild(c);
+  });
+  // Constant speed (~45px/s) whatever the number of cards.
+  track.style.setProperty('--marquee-duration', `${track.scrollWidth / 2 / 45}s`);
 }
