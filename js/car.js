@@ -9,7 +9,7 @@ const REAR_AXLE = -1.19;
 const WHEEL_R = 0.34;
 const TRACK = 0.74; // half track (wheel centre z)
 
-export const ACCENT = new THREE.Color('#ff5b1f');
+export const ACCENT = new THREE.Color('#e5202e');
 
 function makeMaterials() {
   return {
@@ -27,13 +27,13 @@ function makeMaterials() {
     alloy: new THREE.MeshStandardMaterial({ color: '#b9bec6', metalness: 1, roughness: 0.32 }),
     steel: new THREE.MeshStandardMaterial({ color: '#6d727a', metalness: 1, roughness: 0.42 }),
     darkMetal: new THREE.MeshStandardMaterial({ color: '#2a2c31', metalness: 0.85, roughness: 0.45 }),
-    caliper: new THREE.MeshStandardMaterial({ color: '#e0381a', metalness: 0.3, roughness: 0.35 }),
+    caliper: new THREE.MeshStandardMaterial({ color: '#c8101e', metalness: 0.3, roughness: 0.35 }),
     accent: new THREE.MeshStandardMaterial({ color: '#b3241a', metalness: 0.5, roughness: 0.55 }),
-    spring: new THREE.MeshStandardMaterial({ color: '#ff5b1f', metalness: 0.5, roughness: 0.35 }),
+    spring: new THREE.MeshStandardMaterial({ color: '#d61f2c', metalness: 0.5, roughness: 0.35 }),
     titanium: new THREE.MeshStandardMaterial({ color: '#8f8479', metalness: 1, roughness: 0.3 }),
     headlight: new THREE.MeshStandardMaterial({ color: '#e8f0ff', emissive: '#cfe0ff', emissiveIntensity: 1.4 }),
     taillight: new THREE.MeshStandardMaterial({ color: '#5a0000', emissive: '#ff1a0a', emissiveIntensity: 1.6 }),
-    wire: new THREE.MeshStandardMaterial({ color: '#ff5b1f', emissive: '#ff5b1f', emissiveIntensity: 0.9, roughness: 0.6 }),
+    wire: new THREE.MeshStandardMaterial({ color: '#ff3040', emissive: '#e5202e', emissiveIntensity: 0.9, roughness: 0.6 }),
     coolant: new THREE.MeshStandardMaterial({ color: '#4fb3ff', emissive: '#1d6fd1', emissiveIntensity: 0.6, roughness: 0.5 }),
     pcb: new THREE.MeshStandardMaterial({ color: '#0f1a14', emissive: '#19ff8c', emissiveIntensity: 0.25, roughness: 0.6 }),
     leather: new THREE.MeshStandardMaterial({ color: '#2a1d17', roughness: 0.75 }),
